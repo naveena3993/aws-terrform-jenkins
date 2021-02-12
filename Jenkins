@@ -1,0 +1,75 @@
+pipeline {
+  agent {
+    node {
+      label 'Agent_Azure'
+    }
+  }
+  stages {
+        stage('Git checkout') {
+      steps {
+        git branch: 'npokala_terraform', credentialsId: 'jenkins-npokala', url: 'https://bitbucket.analog.com/scm/isdo/samplejenkinspipeline.git'
+      }
+        }
+  // Run terraform init
+  stage('init') {
+    node {
+      withCredentials([[
+        $class: 'AmazonWebServicesCredentialsBinding',
+        credentialsId: aws-dev-cred,
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      ]]) {
+         bat "terraform init"
+         // bat  "for /D %G in ("*") do cd "%~fG" & terraform init & cd .."
+
+      }
+    }
+  }
+
+  // Run terraform plan
+  stage('plan') {
+    node {
+      withCredentials([[
+        $class: 'AmazonWebServicesCredentialsBinding',
+        credentialsId: aws-dev-cred,
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      ]]) {
+	bat "cd C:\\Jenkins\\ & terraform plan"
+       // bat "for /D %G in ("*") do cd "%~fG" & terraform plan & cd .."
+
+      }
+    }
+  }
+
+    // Run terraform apply
+    stage('apply') {
+      node {
+        withCredentials([[
+          $class: 'AmazonWebServicesCredentialsBinding',
+          credentialsId: aws-dev-cred,
+          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+        ]]) {
+
+	bat "cd C:\\Jenkins\\ & terraform apply -auto-approve"
+        // bat "for /D %G in ("*") do cd "%~fG" & terraform apply -auto-approve & cd .. "
+          
+        }
+      }
+
+  }
+  currentBuild.result = 'SUCCESS'
+}
+catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException flowError) {
+  currentBuild.result = 'ABORTED'
+}
+catch (err) {
+  currentBuild.result = 'FAILURE'
+  throw err
+}
+finally {
+  if (currentBuild.result == 'SUCCESS') {
+    currentBuild.result = 'SUCCESS'
+  }
+}
