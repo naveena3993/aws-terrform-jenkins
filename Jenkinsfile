@@ -13,7 +13,7 @@ pipeline{
   stage('init') {
   steps {
       withCredentials([[
-        $class: 'AmazonWebServicesCredentialsBinding',
+        $class: 'awsCredentials',
         credentialsId: aws-dev-cred,
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
@@ -29,7 +29,7 @@ pipeline{
   stage('plan') {
     steps {
       withCredentials([[
-        $class: 'AmazonWebServicesCredentialsBinding',
+        $class: 'awsCredentials',
         credentialsId: aws-dev-cred,
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
@@ -47,7 +47,7 @@ pipeline{
     stage('apply') {
       steps {
         withCredentials([[
-          $class: 'AmazonWebServicesCredentialsBinding',
+          $class: 'awsCredentials',
           credentialsId: aws-dev-cred,
           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
