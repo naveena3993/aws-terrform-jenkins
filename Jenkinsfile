@@ -8,7 +8,7 @@ pipeline {
         }
   // Run terraform init
   stage('init') {
-    node {
+  steps {
       withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
         credentialsId: aws-dev-cred,
@@ -24,7 +24,7 @@ pipeline {
 
   // Run terraform plan
   stage('plan') {
-    node {
+    steps {
       withCredentials([[
         $class: 'AmazonWebServicesCredentialsBinding',
         credentialsId: aws-dev-cred,
@@ -42,7 +42,7 @@ pipeline {
 
     // Run terraform apply
     stage('apply') {
-      node {
+      steps {
         withCredentials([[
           $class: 'AmazonWebServicesCredentialsBinding',
           credentialsId: aws-dev-cred,
