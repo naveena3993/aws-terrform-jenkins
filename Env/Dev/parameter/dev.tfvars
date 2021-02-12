@@ -1,0 +1,1 @@
+bucket_01 = "bucket000101"
