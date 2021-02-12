@@ -15,7 +15,7 @@ pipeline {
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
       ]]) {
-        sh ' terraform init'
+        sh ''' terraform init '''
          // bat  "for /D %G in ("*") do cd "%~fG" & terraform init & cd .."
 
       }
@@ -31,9 +31,9 @@ pipeline {
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
       ]]) {
-	      sh ' 
+	      sh '''
 	cd /var/lib/jenkins & terraform plan
-	      '
+	     '''
        // bat "for /D %G in ("*") do cd "%~fG" & terraform plan & cd .."
 
       }
@@ -49,9 +49,9 @@ pipeline {
           accessKeyVariable: 'AWS_ACCESS_KEY_ID',
           secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
         ]]) {
-sh '
+sh '''
 	cd /var/lib/jenkins & terraform apply -auto-approve
-		'
+	'''
         // bat "for /D %G in ("*") do cd "%~fG" & terraform apply -auto-approve & cd .. "
           
         }
