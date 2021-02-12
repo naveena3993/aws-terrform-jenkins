@@ -12,12 +12,11 @@ pipeline{
   // Run terraform init
   stage('init') {
   steps {
-      withCredentials([[
-        $class: 'awsCredentials',
-        credentialsId: aws-dev-cred,
+      withCredentials([awsCredentials(
+        credentialsId: 'aws-dev-cred',
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-      ]]) {
+      )]) {
         sh ''' terraform init '''
          // bat  "for /D %G in ("*") do cd "%~fG" & terraform init & cd .."
 
@@ -28,12 +27,11 @@ pipeline{
   // Run terraform plan
   stage('plan') {
     steps {
-      withCredentials([[
-        $class: 'awsCredentials',
-        credentialsId: aws-dev-cred,
+      withCredentials([awsCredentials(
+        credentialsId: 'aws-dev-cred',
         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-      ]]) {
+      )]) {
 	      sh '''
 	cd /var/lib/jenkins & terraform plan
 	     '''
@@ -46,12 +44,11 @@ pipeline{
     // Run terraform apply
     stage('apply') {
       steps {
-        withCredentials([[
-          $class: 'awsCredentials',
-          credentialsId: aws-dev-cred,
-          accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-        ]]) {
+        withCredentials([awsCredentials(
+        credentialsId: 'aws-dev-cred',
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      )]) {
 sh '''
 	cd /var/lib/jenkins & terraform apply -auto-approve
 	'''
